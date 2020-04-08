@@ -44,6 +44,9 @@ class Oven:
         return 2 * (self.radius + self.concrete_insulation_width +
                     self.fiber_blanket_insulation_width + self.fire_brick.length / 2)
 
+    def min_oven_length(self) -> float:
+        return 2 * (self.radius + self.fire_brick.length / 2) + self.vent_landing.length
+
     def _inner_opening_edge_dist(self) -> float:
         # calculates the distance from the center of the oven to the inner edge of the oven opening
         return hypot(self.oven_outer_opening_width() / 2, self.radius)
@@ -60,6 +63,9 @@ class Oven:
     def _concrete_insulation_dist(self) -> float:
         return self._fiber_blanket_insulation_dist() + self.concrete_insulation_width
 
+    def _corner_install(self) -> float:
+        return hypot(self.radius + self.vent_landing.length, self.oven_outer_opening_width() / 2)
+
     def __repr__(self):
         return f"Oven dimensions:\n" + \
                f"{self.fire_brick}\n" + \
@@ -68,12 +74,14 @@ class Oven:
                f"Inner opening edge dist: {self._inner_opening_edge_dist()}, " + \
                f"outer opening edge dist: {self._outer_opening_edge_dist()}, \n" + \
                f"the min oven width is: {self.min_oven_width()}," \
-               f" oven outer opening width is: {self.oven_outer_opening_width()}"
+               f" oven outer opening width is: {self.oven_outer_opening_width()}, \n" + \
+               f"the min oven length is: {self.min_oven_length()}, " + \
+               f"width/length for corner install is: {self._corner_install() * 2}."
 
 
 if __name__ == "__main__":
     fire_brick_ = FireBrick(23, 11.4, 6.4)
     oven_opening_ = OvenOpening(45)
-    vent_landing_ = VentLanding(15.24)
+    vent_landing_ = VentLanding(20)
     oven_ = Oven(40, fire_brick_, oven_opening_, vent_landing_)
     print(oven_)
